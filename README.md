@@ -19,8 +19,8 @@ project folder then build it the normal way.
 Building and running :
 ----------------------
 
- $ mkdir build
- $ cd build
- $ cmake ..
- $ make
- $ make install / copy .so/.dll file into the same folder of tomahawk binary
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+    $ make
+    $ make install / copy .so/.dll file into the same folder of tomahawk binary
