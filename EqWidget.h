@@ -16,14 +16,12 @@ namespace Ui {
 class Equalizer;
 };
 
-class EqEffect;
-
 class EqWidget : public QWidget, public Tomahawk::ViewPage
 {
 	Q_OBJECT
 
 public:
-	EqWidget( EqEffect* eqEffect, QWidget *parent = 0 );
+	EqWidget( QWidget *parent = 0 );
 	~EqWidget();
 
 	bool jumpToCurrentTrack() { return false; }
@@ -63,6 +61,5 @@ private:
 	Ui::Equalizer* m_equalizerUi;
 	int preamp;
 	int band[10];
-	EqEffect* m_effect;
 };
 #endif // EQWIDGET_H

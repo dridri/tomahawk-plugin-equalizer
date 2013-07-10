@@ -4,8 +4,6 @@
 #include <infosystem/InfoSystem.h>
 #include <ViewPage.h>
 
-class EqEffect;
-
 namespace Tomahawk
 {
 
@@ -33,7 +31,6 @@ private slots:
 
 private:
 	Tomahawk::ViewPage* viewPageLoader();
-	EqEffect* m_effect;
 };
 
 }

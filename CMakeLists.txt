@@ -21,7 +21,6 @@ tomahawk_add_plugin(equalizer
         ${EqPlugin_UI}
         EqPlugin.cpp
         EqWidget.cpp
-        EqEffect.cpp
     LINK_LIBRARIES
         ${TOMAHAWK_LIBRARIES}
 )

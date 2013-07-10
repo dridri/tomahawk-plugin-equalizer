@@ -5,10 +5,9 @@
 #include <phonon/EffectParameter>
 
 #include "EqWidget.h"
-#include "EqEffect.h"
 #include "ui_equalizer.h"
 
-EqWidget::EqWidget(EqEffect* eqEffect, QWidget* parent)
+EqWidget::EqWidget(QWidget* parent)
 	: QWidget(parent)
 	, m_equalizerUi( new Ui::Equalizer )
 {
@@ -30,12 +29,7 @@ EqWidget::EqWidget(EqEffect* eqEffect, QWidget* parent)
 	connect( m_equalizerUi->eq_8, SIGNAL( valueChanged( int ) ), this, SLOT( setBand8( int ) ) );
 	connect( m_equalizerUi->eq_9, SIGNAL( valueChanged( int ) ), this, SLOT( setBand9( int ) ) );
 
-	preamp = -4;
-	for(int i=0; i<10; i++){
-		band[i] = 0;
-	}
-
-	m_effect = eqEffect;
+	reset();
 }
 
 void EqWidget::resizeEvent(QResizeEvent* event)
@@ -51,13 +45,13 @@ void EqWidget::enable(bool en)
 	if(en)
 	{
 		for(int i=0; i<10; i++){
-			m_effect->setEqualizer(i, preamp + band[i]);
+			AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
 		}
 	}
 	else
 	{
 		for(int i=0; i<10; i++){
-			m_effect->setEqualizer(i, 0);
+			AudioEngine::instance()->setEqualizerBand(i, 0);
 		}
 	}
 }
@@ -75,9 +69,10 @@ void EqWidget::reset()
 	m_equalizerUi->eq_7->setValue(0);
 	m_equalizerUi->eq_8->setValue(0);
 	m_equalizerUi->eq_9->setValue(0);
+	preamp = -4;
 	for(int i=0; i<10; i++){
 		band[i] = 0;
-		m_effect->setEqualizer(i, preamp + band[i]);
+		AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
 	}
 }
 
@@ -85,7 +80,7 @@ void EqWidget::setPreamp(int value)
 {
 	preamp = value;
 	for(int i=0; i<10; i++){
-		m_effect->setEqualizer(i, preamp + band[i]);
+		AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
 	}
 }
 
@@ -98,7 +93,7 @@ void EqWidget::setBand0(int value)
 	}
 	band[0] = v;
 	v += preamp;
-	m_effect->setEqualizer(0, v);
+	AudioEngine::instance()->setEqualizerBand(0, v);
 }
 
 void EqWidget::setBand1(int value)
@@ -110,7 +105,7 @@ void EqWidget::setBand1(int value)
 	}
 	band[1] = v;
 	v += preamp;
-	m_effect->setEqualizer(1, v);
+	AudioEngine::instance()->setEqualizerBand(1, v);
 }
 
 void EqWidget::setBand2(int value)
@@ -122,7 +117,7 @@ void EqWidget::setBand2(int value)
 	}
 	band[2] = v;
 	v += preamp;
-	m_effect->setEqualizer(2, v);
+	AudioEngine::instance()->setEqualizerBand(2, v);
 }
 
 void EqWidget::setBand3(int value)
@@ -134,7 +129,7 @@ void EqWidget::setBand3(int value)
 	}
 	band[3] = v;
 	v += preamp;
-	m_effect->setEqualizer(3, v);
+	AudioEngine::instance()->setEqualizerBand(3, v);
 }
 
 void EqWidget::setBand4(int value)
@@ -146,7 +141,7 @@ void EqWidget::setBand4(int value)
 	}
 	band[4] = v;
 	v += preamp;
-	m_effect->setEqualizer(4, v);
+	AudioEngine::instance()->setEqualizerBand(4, v);
 }
 
 void EqWidget::setBand5(int value)
@@ -158,7 +153,7 @@ void EqWidget::setBand5(int value)
 	}
 	band[5] = v;
 	v += preamp;
-	m_effect->setEqualizer(5, v);
+	AudioEngine::instance()->setEqualizerBand(5, v);
 }
 
 void EqWidget::setBand6(int value)
@@ -170,7 +165,7 @@ void EqWidget::setBand6(int value)
 	}
 	band[6] = v;
 	v += preamp;
-	m_effect->setEqualizer(6, v);
+	AudioEngine::instance()->setEqualizerBand(6, v);
 }
 
 void EqWidget::setBand7(int value)
@@ -182,7 +177,7 @@ void EqWidget::setBand7(int value)
 	}
 	band[7] = v;
 	v += preamp;
-	m_effect->setEqualizer(7, v);
+	AudioEngine::instance()->setEqualizerBand(7, v);
 }
 
 void EqWidget::setBand8(int value)
@@ -194,7 +189,7 @@ void EqWidget::setBand8(int value)
 	}
 	band[8] = v;
 	v += preamp;
-	m_effect->setEqualizer(8, v);
+	AudioEngine::instance()->setEqualizerBand(8, v);
 }
 
 void EqWidget::setBand9(int value)
@@ -206,5 +201,5 @@ void EqWidget::setBand9(int value)
 	}
 	band[9] = v;
 	v += preamp;
-	m_effect->setEqualizer(9, v);
+	AudioEngine::instance()->setEqualizerBand(9, v);
 }

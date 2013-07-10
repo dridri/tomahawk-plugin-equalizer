@@ -5,12 +5,10 @@
 
 #include "EqPlugin.h"
 #include "EqWidget.h"
-#include "EqEffect.h"
 
 Tomahawk::InfoSystem::EqPlugin::EqPlugin()
 {
 	tDebug() << Q_FUNC_INFO;
-	m_effect = NULL;
 }
 
 
@@ -27,7 +25,10 @@ Tomahawk::InfoSystem::EqPlugin::init()
 
 	// HACK: we wait for Tomahawk (the MainWindow with the ViewManager to be ready) and use the DirectConnection to make addViewPage be called from the GUI thread
 	connect(QCoreApplication::instance(), SIGNAL( tomahawkLoaded() ), SLOT( addViewPageLoader() ), Qt::DirectConnection );
-	m_effect = new EqEffect();
+
+	for(int i=0; i<10; i++){
+		AudioEngine::instance()->setEqualizerBand(i, -4);
+	}
 }
 
 
@@ -52,7 +53,7 @@ Tomahawk::InfoSystem::EqPlugin::addViewPageLoader()
 Tomahawk::ViewPage* Tomahawk::InfoSystem::EqPlugin::viewPageLoader()
 {
 	tDebug() << Q_FUNC_INFO;
-	return new EqWidget(m_effect, NULL);
+	return new EqWidget(NULL);
 }
 
 
