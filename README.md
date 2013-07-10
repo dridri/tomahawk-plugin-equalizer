@@ -8,7 +8,7 @@ Depends :
 ---------
 
 Latest Tomahawk version.
-VLC does not provide equalizer capability, you should use Gstreamer instead
+VLC-phonon-backend does not provide equalizer capability, you should use Gstreamer backend instead
 
 
 Building and running :
