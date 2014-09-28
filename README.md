@@ -4,11 +4,17 @@ tomahawk-plugin-equalizer
 Equalizer plugin for Tomahawk Player
 
 
-Depends :
----------
+Dependancies :
+--------------
 
-Latest Tomahawk version.
-VLC-phonon-backend does not provide equalizer capability, you should use Gstreamer backend instead
+Tomahawk version 0.8 or higher
+
+VLC-phonon-backend does not provide equalizer capability, for now you will have
+to use a modded version alongside an audio filter available here :
+
+https://github.com/dridri/phonon-vlc
+
+https://github.com/dridri/vlc-dsp-plugin
 
 
 Building and running :
@@ -18,4 +24,4 @@ Building and running :
     $ cd build
     $ cmake ..
     $ make
-    $ make install / copy .so/.dll file into the same folder of tomahawk binary
+    $ make install   -- copy .so/.dll file into the same folder as tomahawk binary
