@@ -2,6 +2,7 @@
 #define EQWIDGET_H
 
 #include <ViewPage.h>
+#include <utils/ImageRegistry.h>
 #include <audio/AudioEngine.h>
 #include <phonon/Path>
 #include <phonon/Effect>
@@ -12,9 +13,14 @@
 #include <QShowEvent>
 #include <QHideEvent>
 
+#include "ui_equalizer.h"
+
+class ViWidget;
+/*
 namespace Ui {
 class Equalizer;
 };
+*/
 
 class EqWidget : public QWidget, public Tomahawk::ViewPage
 {
@@ -25,31 +31,22 @@ public:
 	~EqWidget();
 
 	bool jumpToCurrentTrack() { return false; }
-	QString description() const { return QString("10-band Equalizer"); }
+	QString description() const { return QString("256-bands Equalizer"); }
 	QString title() const{ return QString("Equalizer"); }
-	QPixmap pixmap() const { return QPixmap(); }
+	QPixmap pixmap() const { return ImageRegistry::instance()->pixmap( RESPATH "images/eq_icon.png", QSize( 0, 0 ) ); }
 	Tomahawk::playlistinterface_ptr playlistInterface() const { return Tomahawk::playlistinterface_ptr(); }
-	QWidget* widget(){ return this; }
+	QWidget* widget(){ printf("EqWidget::widget()\n"); fflush(stdout); return this; }
 	//TODO: Add the activate and deactivate methods, which can be called from  ViewManager.cpp
 	//when some other page is being activated, to save the CPU cycles.
 	static bool canRun(){
 	  return true;
 	}
+	ViWidget* visualizer() { return m_visualizer; }
 
 public slots:
 	void enable(bool en);
 	void reset();
 	void setPreamp(int value);
-	void setBand0(int value);
-	void setBand1(int value);
-	void setBand2(int value);
-	void setBand3(int value);
-	void setBand4(int value);
-	void setBand5(int value);
-	void setBand6(int value);
-	void setBand7(int value);
-	void setBand8(int value);
-	void setBand9(int value);
 
 protected:
 	void resizeEvent(QResizeEvent* event);
@@ -59,7 +56,6 @@ protected:
 
 private:
 	Ui::Equalizer* m_equalizerUi;
-	int preamp;
-	int band[10];
+	ViWidget* m_visualizer;
 };
 #endif // EQWIDGET_H

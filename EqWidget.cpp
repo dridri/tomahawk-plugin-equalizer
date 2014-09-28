@@ -4,202 +4,67 @@
 #include <phonon/Effect>
 #include <phonon/EffectParameter>
 
+#include "EqPlugin.h"
 #include "EqWidget.h"
+#include "GraphicEq.h"
 #include "ui_equalizer.h"
+
 
 EqWidget::EqWidget(QWidget* parent)
 	: QWidget(parent)
 	, m_equalizerUi( new Ui::Equalizer )
 {
+	tDebug() << Q_FUNC_INFO;
 	m_equalizerUi->setupUi( this );
-	m_equalizerUi->tab_2->setEnabled(false);
-	m_equalizerUi->tab_2->setVisible(false);
+
+	m_visualizer = 0;
 
 	connect( m_equalizerUi->enabled, SIGNAL( toggled(bool) ), this, SLOT( enable(bool) ) );
 	connect( m_equalizerUi->reset, SIGNAL( clicked() ), this, SLOT( reset() ) );
 	connect( m_equalizerUi->preamp, SIGNAL( valueChanged( int ) ), this, SLOT( setPreamp( int ) ) );
-	connect( m_equalizerUi->eq_0, SIGNAL( valueChanged( int ) ), this, SLOT( setBand0( int ) ) );
-	connect( m_equalizerUi->eq_1, SIGNAL( valueChanged( int ) ), this, SLOT( setBand1( int ) ) );
-	connect( m_equalizerUi->eq_2, SIGNAL( valueChanged( int ) ), this, SLOT( setBand2( int ) ) );
-	connect( m_equalizerUi->eq_3, SIGNAL( valueChanged( int ) ), this, SLOT( setBand3( int ) ) );
-	connect( m_equalizerUi->eq_4, SIGNAL( valueChanged( int ) ), this, SLOT( setBand4( int ) ) );
-	connect( m_equalizerUi->eq_5, SIGNAL( valueChanged( int ) ), this, SLOT( setBand5( int ) ) );
-	connect( m_equalizerUi->eq_6, SIGNAL( valueChanged( int ) ), this, SLOT( setBand6( int ) ) );
-	connect( m_equalizerUi->eq_7, SIGNAL( valueChanged( int ) ), this, SLOT( setBand7( int ) ) );
-	connect( m_equalizerUi->eq_8, SIGNAL( valueChanged( int ) ), this, SLOT( setBand8( int ) ) );
-	connect( m_equalizerUi->eq_9, SIGNAL( valueChanged( int ) ), this, SLOT( setBand9( int ) ) );
 
 	reset();
 }
 
 void EqWidget::resizeEvent(QResizeEvent* event)
 {
+//	tDebug() << Q_FUNC_INFO;
 }
 
 EqWidget::~EqWidget()
 {
+	tDebug() << Q_FUNC_INFO;
 }
 
 void EqWidget::enable(bool en)
 {
-	if(en)
-	{
-		for(int i=0; i<10; i++){
-			AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
-		}
-	}
-	else
-	{
-		for(int i=0; i<10; i++){
-			AudioEngine::instance()->setEqualizerBand(i, 0);
-		}
-	}
+	tDebug() << Q_FUNC_INFO;
 }
 
 void EqWidget::reset()
 {
-	m_equalizerUi->preamp->setValue(-4);
-	m_equalizerUi->eq_0->setValue(0);
-	m_equalizerUi->eq_1->setValue(0);
-	m_equalizerUi->eq_2->setValue(0);
-	m_equalizerUi->eq_3->setValue(0);
-	m_equalizerUi->eq_4->setValue(0);
-	m_equalizerUi->eq_5->setValue(0);
-	m_equalizerUi->eq_6->setValue(0);
-	m_equalizerUi->eq_7->setValue(0);
-	m_equalizerUi->eq_8->setValue(0);
-	m_equalizerUi->eq_9->setValue(0);
-	preamp = -4;
-	for(int i=0; i<10; i++){
-		band[i] = 0;
-		AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
+	tDebug() << Q_FUNC_INFO;
+
+	Tomahawk::Widgets::EqPlugin::instance()->setPreamp(0.0f);
+
+	for(int i=0; i<Tomahawk::Widgets::EqPlugin::instance()->bandCount(); i++){
+		Tomahawk::Widgets::EqPlugin::instance()->setBand(i, 1.0f);
 	}
+
+	m_equalizerUi->preamp->setValue(-4);
+	m_equalizerUi->eq->repaint();
 }
 
 void EqWidget::setPreamp(int value)
 {
-	preamp = value;
-	for(int i=0; i<10; i++){
-		AudioEngine::instance()->setEqualizerBand(i, preamp + band[i]);
+	tDebug() << Q_FUNC_INFO;
+
+	float v = 0.0;
+	if(value >= 0){
+		v = ((float)value + 128.0) / 128.0;
+	}else{
+		v = 1.0 + (((float)value) / 128.0);
 	}
+	Tomahawk::Widgets::EqPlugin::instance()->setPreamp(v);
 }
 
-void EqWidget::setBand0(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[0] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(0, v);
-}
-
-void EqWidget::setBand1(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[1] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(1, v);
-}
-
-void EqWidget::setBand2(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[2] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(2, v);
-}
-
-void EqWidget::setBand3(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[3] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(3, v);
-}
-
-void EqWidget::setBand4(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[4] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(4, v);
-}
-
-void EqWidget::setBand5(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[5] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(5, v);
-}
-
-void EqWidget::setBand6(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[6] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(6, v);
-}
-
-void EqWidget::setBand7(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[7] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(7, v);
-}
-
-void EqWidget::setBand8(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[8] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(8, v);
-}
-
-void EqWidget::setBand9(int value)
-{
-	int v = value;
-	if(v > 0)
-	{
-		v /= 2;
-	}
-	band[9] = v;
-	v += preamp;
-	AudioEngine::instance()->setEqualizerBand(9, v);
-}
